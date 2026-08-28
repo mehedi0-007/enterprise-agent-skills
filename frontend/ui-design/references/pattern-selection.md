@@ -1,23 +1,24 @@
-# UI Pattern Selection
+# Pattern Selection
 
-## Link vs Button
-Use a link when activation navigates to a destination.
-Use a button when activation performs an action.
+## Link
+Navigation to another destination.
 
-## Menu vs Visible Action
-Keep frequent/high-value actions visible.
-Use a menu for secondary actions that would otherwise overwhelm the interface.
+## Button
+Performs an action/state change.
 
-## Dialog vs Page
-Use a dialog for a focused decision or short contextual task that should temporarily interrupt attention.
-Use a page for complex workflows, substantial content, or tasks users may need to bookmark/revisit.
+## Menu
+Secondary/local actions where persistent controls would clutter.
+
+## Dialog
+Focused decision or short contextual task.
 
 ## Drawer/Sheet
-Useful when users need contextual work while retaining the underlying page.
+Contextual work while preserving page context.
+
+## Page
+Complex, multi-step, bookmarkable, or information-dense workflows.
 
 ## Tooltip
-Use for supplemental information, not required instructions or critical interaction guidance.
+Supplemental explanation only.
 
-## Destructive Actions
-The more irreversible/high-impact the action, the more deliberate the interaction should be.
-Use explicit labels and confirmation where the risk warrants it.
+Choose from the user's task and consequence, not from component availability.
