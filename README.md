@@ -1,23 +1,23 @@
-# Enterprise Agent Skills — Batch 1
+# Batch 3 — Security Skills
 
-This is the first batch of a reusable `.agents/skills` library for production-oriented software engineering.
+Adds:
+- security/authentication
+- security/authorization
+- security/api-security
+- security/owasp
+- security/secrets-management
 
-Included:
-- engineering/requirements-analysis
-- engineering/architecture
-- engineering/production-readiness
-- backend/api-design
-- backend/service-layer
-- database/postgresql
+## Source trail
 
-The skills are intentionally framework-agnostic except where the project context naturally applies. They are designed to complement, not replace, Superpowers: Superpowers supplies the development workflow; these skills supply domain-specific engineering judgment.
+Primary sources:
+- OWASP API Security Top 10 (2023)
+- OWASP Authentication Cheat Sheet
+- OWASP Authorization Cheat Sheet
+- OWASP Secrets Management Cheat Sheet
+- OWASP Secure Code Review guidance
+- OWASP Cheat Sheet Series
 
-Primary references used while shaping this batch:
-- IETF RFC 9110 — HTTP Semantics
-- PostgreSQL 18 documentation — Indexes and EXPLAIN
-- OWASP API Security Top 10
-- wshobson/agents — Agent Skills structure and backend/API skill patterns
-- magnus919/agent-skills — backend-engineering and product-design/UX patterns
-- Vercel Web Interface Guidelines — for the future frontend batch
+The skills are synthesized guidance rather than copied source files. They are intended to complement the engineering workflow provided by Superpowers and the backend/database skills in this repository.
 
-These are synthesized instructions, not copied repository files.
+## Important
+These skills are a security baseline, not a guarantee of security or compliance. High-risk systems still require threat modeling, security review, testing, and appropriate professional assessment.

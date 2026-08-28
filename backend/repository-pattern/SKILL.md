@@ -1,93 +1,58 @@
 ---
 name: repository-pattern
-description: Define and review persistence boundaries in backend applications. Use when deciding where database queries belong, designing repositories/data-access modules, reviewing query abstractions, or preventing business logic from leaking into persistence code.
+description: Design persistence boundaries and data-access abstractions. Use when creating repositories, reviewing ORM usage, designing queries, or deciding whether a repository abstraction is justified.
 ---
 
 # Repository Pattern
 
-## Purpose
-Keep persistence concerns explicit without turning repositories into generic wrappers or hiding important business behavior.
+## Mission
+Isolate persistence concerns without hiding meaningful query semantics or creating abstraction ceremony.
 
-## Responsibilities
-A repository/data-access component may own:
-- database queries
+## Use a Repository When
+- persistence logic is non-trivial
+- a meaningful data-access boundary improves testability/changeability
+- queries are reused coherently
+- the application needs a stable persistence port
+
+Do not create a repository merely because every entity is expected to have one.
+
+## Repository Owns
+- SQL/ORM query construction
+- projections
 - persistence mapping
-- query-specific projections
-- persistence-specific filters/sorting
+- persistence-specific filters
 - persistence error translation
-- efficient data retrieval
 
-It should not own:
-- HTTP concerns
+## Repository Does Not Own
+- HTTP
 - authorization policy
-- unrelated business workflows
-- email/payment/queue side effects
-- arbitrary orchestration across unrelated use cases
+- unrelated workflows
+- email/payment/queue orchestration
+- business decisions
 
-## Before Introducing a Repository
-Ask:
-1. Is there meaningful persistence behavior to isolate?
-2. Will the abstraction improve testing or changeability?
-3. Is the codebase already using a consistent data-access pattern?
-4. Would direct ORM/SQL access be clearer for this simple operation?
+## Interface Shape
+Prefer intent-revealing operations over a generic CRUD abstraction when queries have meaningful semantics.
 
-Do not introduce a repository only because "clean architecture" says every model must have one.
+Good:
+`findActiveSubscriptionsForAccount(accountId)`
 
-## Query Design
-Repositories should expose operations aligned with use cases or meaningful data-access capabilities, not an enormous set of generic methods.
+Suspicious:
+`find({ where, joins, options, rawSql, ... })`
 
-Prefer:
-- getById
-- findActiveByEmail
-- listForOrganization
-- save
-- delete
-
-over a generic abstraction that hides important query semantics.
-
-Return only data needed by the caller when practical. Avoid accidental full-row loading.
-
-## Boundaries
-Keep business decisions in services/domain code.
-A repository can answer:
-"Which orders are pending for this customer?"
-
-It should not decide:
-"Should this customer be allowed to cancel the order?"
-
-That policy belongs to the application/domain layer.
-
-## Transactions
-Do not make every repository method silently open its own transaction.
-Transaction ownership should be explicit at the application/use-case boundary when multiple operations must be atomic.
-
-## Error Handling
-Translate low-level persistence errors when callers need a stable domain/application error. Preserve enough diagnostic context for logs without leaking database internals to API clients.
+The latter can become an accidental database API exposed to the entire application.
 
 ## Performance
-Watch for:
-- N+1 queries
+Repositories are a common location for:
+- N+1
 - over-fetching
-- unbounded lists
-- repeated identical queries
-- accidental joins
-- loading large blobs unnecessarily
+- missing pagination
+- inefficient joins
+- repeated queries
 
-When performance matters, measure the actual query rather than optimizing the abstraction first.
+Review actual generated SQL when performance matters.
 
-## Anti-Patterns
-Avoid:
-- repository-per-table purely for ceremony
-- generic "BaseRepository" with dozens of unused methods
-- business logic hidden in SQL helpers
-- repositories returning ORM entities everywhere when a read model/projection is clearer
-- transaction boundaries that are impossible to see from the use case
+## Transaction Ownership
+Do not hide transaction boundaries inside individual repository calls when a use case spans multiple operations.
 
 ## Verification
-Review:
-- clear responsibility
-- predictable transaction ownership
-- no business rules hidden in persistence
-- query count is appropriate
-- no accidental sensitive-field exposure
-- tests cover important persistence behavior
+Review query shape, returned data, authorization-sensitive fields, transaction behavior, and test coverage.

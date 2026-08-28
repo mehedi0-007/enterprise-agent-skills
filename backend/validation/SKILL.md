@@ -1,68 +1,47 @@
 ---
 name: validation
-description: Design input validation at API and application boundaries. Use for request DTOs, query parameters, path parameters, file uploads, domain validation, and security-sensitive input handling.
+description: Validate untrusted input at backend boundaries and keep business rules in the correct layer. Use for DTOs, query/path parameters, files, patch semantics, and security-sensitive inputs.
 ---
 
 # Validation
 
-## Purpose
-Reject malformed or unacceptable input early while keeping business rules in the correct layer.
-
-## Boundary Validation
-Validate untrusted input at the transport boundary:
-- type/shape
-- required fields
+## Boundary
+Validate:
+- type and shape
+- required/optional semantics
 - length/range
-- format
+- formats
 - enum values
-- collection limits
-- file size/type constraints where relevant
-
-Treat all client input as untrusted.
+- collection size
+- file size/type
 
 ## Validation vs Business Rules
-Transport validation answers:
-"Is this input structurally valid?"
+Structural validation:
+"Is this request well formed?"
 
-Business validation answers:
-"Is this operation allowed given current business state?"
+Business validation:
+"Is this operation valid given current state and policy?"
 
-Examples:
-- email has valid syntax -> boundary validation
-- user is allowed to change this email -> business/authorization logic
-- start date is before end date -> may belong to boundary validation
-- start date is permitted by the booking policy -> domain/application logic
-
-Do not put database-dependent business logic inside DTO validators merely because it is convenient.
+Do not put database-dependent business policy into DTO validators merely for convenience.
 
 ## Canonicalization
-Normalize input where the domain requires it:
-- whitespace
-- case where identifiers are case-insensitive
-- Unicode/format normalization where applicable
+Normalize only when domain semantics explicitly require it.
 
-Do not silently alter user data when the semantic effect is uncertain.
+Be precise about:
+- case sensitivity
+- whitespace
+- Unicode
+- null vs omitted
+- empty strings/collections
 
 ## Security
-Never treat validation as the only security control.
-Also apply:
-- authorization
-- output filtering
+Validation is not authorization.
+Also use:
+- server-side access control
 - parameterized queries
+- output filtering
 - rate limits
-- size limits
-- safe parsing
-- content-type verification for uploads
-
-## Partial Updates
-PATCH-like operations should distinguish:
-- omitted field
-- explicit null
-- empty string/collection
-according to the API contract.
-
-Do not invent semantics.
+- resource limits
 
 ## Verification
-Test valid, invalid, boundary, missing, null, oversized, unexpected, and malicious-looking inputs.
-Verify rejected input never reaches sensitive operations.
+Test valid, invalid, boundary, null, omitted, oversized, unexpected, and malicious-looking inputs. Verify rejected inputs cannot reach sensitive operations.

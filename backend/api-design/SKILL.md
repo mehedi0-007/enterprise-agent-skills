@@ -1,109 +1,104 @@
 ---
 name: api-design
-description: Design production-grade HTTP APIs with consistent resources, methods, status codes, validation, pagination, errors, idempotency, authorization, and compatibility. Use when creating, changing, reviewing, or documenting API endpoints.
+description: Design and review production HTTP APIs. Use when creating or modifying endpoints, resource contracts, pagination, filtering, errors, idempotency, webhooks, uploads, caching, or compatibility behavior.
 ---
 
 # API Design
 
-## Goal
-Create APIs that are predictable for clients, semantically correct, secure, and maintainable.
+## Mission
+Make APIs predictable, secure, evolvable, and semantically correct.
+
+## Before Designing
+Determine:
+- resource/domain concept
+- actor and authorization
+- operation semantics
+- mutability
+- retryability
+- expected cardinality
+- consistency requirements
+- external side effects
+- compatibility requirements
 
 ## Resource Modeling
-- Model stable business resources rather than implementation details.
-- Prefer nouns for resource paths.
-- Use nested resources only when the relationship is meaningful and bounded.
-- Do not encode arbitrary database structure into the public API.
+Model business resources, not tables or implementation details.
+Use nouns and stable identifiers.
+Use nesting only when the relationship is meaningful and bounded.
 
-Examples:
-- GET /users/{id}
-- POST /orders
-- PATCH /orders/{id}
-- DELETE /sessions/{id}
+## Method/Status Matrix
 
-## HTTP Semantics
-Use HTTP methods according to their semantics. Use status codes consistently:
-- 200 successful response
-- 201 resource created
-- 202 accepted for asynchronous processing
-- 204 successful response with no content
-- 400 malformed/invalid request
-- 401 unauthenticated
-- 403 authenticated but not allowed
-- 404 resource not found
-- 409 state/conflict condition
-- 422 when the API convention uses semantic validation errors
-- 429 rate limited
-- 5xx server/dependency failure
+| Operation | Typical method | Typical success |
+|---|---|---|
+| Fetch | GET | 200 |
+| Create | POST | 201 |
+| Replace | PUT | 200/204 |
+| Partial update | PATCH | 200/204 |
+| Delete | DELETE | 204 |
+| Accepted async work | POST/other | 202 |
 
-Do not use 200 for every failure.
+Use status codes that communicate semantics. Keep the project's error contract consistent.
 
-## Request Design
-Validate at the boundary:
-- syntax and types
-- required fields
-- allowed values
-- size/range constraints
-- cross-field constraints that are safe to validate without business state
+## Collection Design
+Potentially unbounded collections need:
+- pagination
+- deterministic ordering
+- explicit maximum page size
+- bounded filters
+- safe allow-listed sort fields
 
-Do not trust client-supplied identity, ownership, role, price, or other security-sensitive values.
+Use offset pagination for simple/small cases. Consider cursor/keyset pagination for large or high-churn datasets.
 
-## Response Design
-- Keep response shapes consistent.
-- Return only data the client is authorized to see.
-- Avoid leaking internal database models.
-- Define stable identifiers and timestamps.
-- Avoid accidental serialization of secrets/internal fields.
+## Idempotency Decision
 
-## Pagination
-Use pagination for potentially unbounded collections.
-Offset pagination is acceptable for small/stable datasets and simple admin views.
-Prefer cursor/keyset pagination when datasets are large, frequently changing, or require stable traversal.
-Document ordering and cursor semantics.
+Ask:
+1. Can a client/network retry?
+2. Can duplicate execution cause harm?
+3. Does the operation create an external side effect?
+4. Can a unique business key enforce deduplication?
+5. Is an idempotency key appropriate?
+6. Where is idempotency state stored?
+7. What does a duplicate request return?
 
-## Filtering and Sorting
-- Use explicit, allow-listed fields.
-- Do not expose arbitrary SQL expressions.
-- Define deterministic ordering for paginated results.
-- Validate filter values and limits.
+Do not claim POST is safe merely because the handler "usually" creates one object.
 
-## Idempotency
-For retryable state-changing operations such as payments, provisioning, or external side effects:
-- define whether the operation is idempotent
-- use an idempotency key where appropriate
-- persist enough state to safely recognize retries
-- ensure concurrent duplicate requests cannot produce duplicate side effects
-
-## Errors
-Use one consistent error envelope across the application.
-Errors should provide a stable machine-readable code and safe human-readable message.
-Do not expose stack traces, SQL, secrets, or internal service details.
+## Error Contract
+Use stable machine-readable error codes and safe messages.
+Include field errors where useful.
+Never expose SQL, stack traces, secrets, or internal infrastructure.
 
 ## Authorization
-Authorization is part of endpoint design, not an afterthought.
 Check:
 - authentication
 - function-level permission
-- object-level ownership/access
-- property-level exposure where relevant
+- object-level access
+- tenant scope
+- property-level exposure
+
+Client-side controls never replace server-side authorization.
 
 ## Compatibility
-Avoid breaking existing clients casually.
-Consider:
-- additive changes first
-- field deprecation
-- versioning only when necessary
-- backward-compatible response/request evolution
+Prefer additive evolution. Consider old clients and rolling deployments. Deprecate before removing when practical.
+
+## Caching
+Only add caching after defining:
+- cache key
+- freshness
+- invalidation
+- authorization interaction
+- stale behavior
+- failure fallback
+
+## Webhooks
+Define signature verification, replay handling, idempotent processing, timeout/retry semantics, and delivery observability.
+
+## Anti-patterns
+- `/getUsers`
+- arbitrary SQL exposed through query parameters
+- unbounded list endpoints
+- 200 responses for application failures
+- returning ORM entities blindly
+- silently changing response semantics
+- trusting client tenant/user IDs
 
 ## Verification
-Before shipping an endpoint, check:
-- method/path semantics
-- validation
-- authorization
-- status codes
-- response contract
-- pagination/filtering behavior
-- concurrency/idempotency
-- error contract
-- rate limiting
-- observability
-- API documentation
+Review request/response schemas, status codes, authorization, limits, retries, idempotency, compatibility, documentation, and tests.

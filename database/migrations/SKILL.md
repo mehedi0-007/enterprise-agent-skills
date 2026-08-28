@@ -1,65 +1,51 @@
 ---
 name: migrations
-description: Design safe, repeatable database schema/data migrations for production systems. Use whenever changing tables, constraints, indexes, columns, data shape, or database objects.
+description: Design safe production database schema and data migrations under rolling deployments and existing traffic. Use for columns, constraints, indexes, data backfills, renames, drops, and schema evolution.
 ---
 
 # Database Migrations
 
-## Goal
-Make schema changes safe under existing application traffic and deploy ordering.
+## Compatibility Model
+Assume old and new application versions may coexist during deployment unless the deployment system guarantees otherwise.
 
-## Compatibility First
-Assume old and new application versions may overlap during deployment.
+## Expand and Contract
+For breaking changes:
+1. Add compatible structure.
+2. Deploy code that understands the new structure.
+3. Backfill/transform data.
+4. Switch reads/writes.
+5. Remove old structure in a later change.
 
-Prefer an expand-and-contract approach for breaking changes:
-1. add new structure compatibly
-2. deploy code that can use both where needed
-3. backfill/transform data
-4. switch reads/writes
-5. remove old structure later
+## Large Tables
+Consider:
+- lock duration
+- table rewrite behavior
+- index build impact
+- WAL/replication
+- statement timeouts
+- batch size
+- application traffic
 
-Do not rename/drop a heavily used column as part of a single blind deploy unless the environment guarantees no old readers/writers.
-
-## Adding Columns
-For existing large tables:
-- determine whether a default/constraint causes a rewrite or long lock
-- consider nullable/additive deployment first
-- backfill in controlled batches when appropriate
-- add stronger constraints after data is compliant
-
-## Indexes
-Consider whether index creation can block application traffic and whether online/concurrent techniques are appropriate for the deployment environment.
-
-## Data Backfills
-Backfills should be:
+## Backfills
+Make large backfills:
 - restartable
-- bounded
 - observable
-- safe to rerun or checkpointed
-- designed around lock/transaction duration
-
-Avoid one enormous transaction for millions of rows when it can create unacceptable lock, WAL, timeout, or replication pressure.
+- bounded
+- idempotent or checkpointed
+- safe under concurrent application traffic
 
 ## Constraints
-Before adding NOT NULL, UNIQUE, or foreign-key constraints:
-- check existing data
-- plan cleanup/backfill
+Before adding NOT NULL/UNIQUE/FK:
+- inspect existing violations
+- clean/backfill
 - understand validation/locking impact
-- ensure application behavior is compatible
+- deploy compatible application behavior
+
+## Renames/Drops
+Treat destructive changes as multi-step migrations when old application versions may still reference the object.
 
 ## Rollback
-A migration rollback is not always simply "drop what was added". Data transformations can be irreversible.
-
-Define:
-- what can be reversed
-- what requires a forward fix
-- backup/recovery expectations
-- application rollback compatibility
+Data transformations may be irreversible. Prefer a tested forward-fix strategy when rollback cannot safely reconstruct data.
 
 ## Verification
-For every migration:
-- test against representative schema/data
-- test deployment order
-- verify performance/locking implications
-- verify application compatibility
-- document irreversible operations
+Test against representative data and deployment order. Document lock/performance implications and irreversible operations.

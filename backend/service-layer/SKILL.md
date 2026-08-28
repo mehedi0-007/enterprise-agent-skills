@@ -1,103 +1,61 @@
 ---
 name: service-layer
-description: Design application/service boundaries and business logic placement in backend systems. Use when deciding what belongs in controllers, services, domain code, repositories, or infrastructure, or when a service is becoming large or tightly coupled.
+description: Place application orchestration and business behavior in appropriate backend layers. Use when implementing use cases, controllers, services, repositories, integrations, transactions, or refactoring large services.
 ---
 
 # Service Layer
 
-## Goal
-Keep transport concerns, business decisions, persistence, and infrastructure responsibilities understandable and testable.
+## Responsibility Map
 
-## Responsibilities
+Controller/transport:
+- parse protocol
+- validate DTO shape
+- authenticate context
+- map application result to protocol
 
-### Controller / Transport
-Should handle:
-- request parsing
-- authentication context
-- DTO validation
-- HTTP-specific status/headers
-- mapping transport input to application calls
-- mapping application results to transport responses
+Application service:
+- execute a use case
+- orchestrate domain/repositories/integrations
+- own transaction boundary when appropriate
+- coordinate side effects
 
-Avoid:
-- complex business rules
-- direct multi-step database workflows
-- authorization decisions that belong to business policy
-- external integrations
+Domain:
+- enforce business invariants
+- calculate business decisions
+- model meaningful state transitions
 
-### Application Service
-Should orchestrate a use case:
-- load required data
-- invoke business rules
-- coordinate repositories/integrations
-- define application transaction boundaries
-- produce an application result
+Repository:
+- persistence/query behavior
 
-Avoid turning it into a generic "god service".
+Infrastructure:
+- external systems and technical adapters
 
-### Domain
-Place rules that must remain true regardless of HTTP, CLI, queue, or UI entry point here when practical.
-Examples:
-- state transition rules
-- invariants
-- pricing/business calculations
-- eligibility rules
+## Decision Rule
+Put logic where it remains correct if the entry point changes.
 
-### Repository / Persistence
-Own:
-- queries
-- persistence mapping
-- data-access concerns
-- query-specific optimization
-
-Do not hide meaningful business decisions inside repositories.
-
-### Infrastructure
-Own external concerns:
-- email provider
-- object storage
-- payment provider
-- queue
-- cache
-- third-party APIs
+If the same business rule would be needed from HTTP, queue, CLI, and scheduled jobs, it should not live only in a controller.
 
 ## Transactions
-A transaction should cover the smallest set of writes that must commit atomically.
-Do not hold transactions across slow network calls unless there is a deliberate and justified design.
-Be explicit about transaction ownership.
+A use case that needs multiple writes to commit atomically should normally own that transaction boundary. Avoid each repository opening independent hidden transactions.
 
-## Side Effects
-For important state changes followed by external effects, consider:
-- transactional outbox
-- retry policy
-- idempotency
-- failure recovery
-- eventual consistency
-
-Do not assume "database write succeeded, therefore email/payment/webhook succeeded."
-
-## Dependencies
-Prefer dependencies pointing toward stable business/application abstractions.
-Avoid circular dependencies and service-to-service chains that make behavior difficult to reason about.
+## External Side Effects
+Database commit and external side effects are separate reliability domains.
+For important workflows consider outbox/event patterns, idempotency, retries, and reconciliation.
 
 ## Service Size
-When a service becomes difficult to understand:
-1. identify distinct use cases
-2. identify shared domain rules
-3. separate infrastructure adapters
-4. extract only cohesive responsibilities
-5. preserve transaction and error semantics
+Split by cohesive use cases/responsibilities, not arbitrary line count.
+A large service may be a symptom of:
+- too many use cases
+- mixed infrastructure
+- missing domain concepts
+- unclear ownership
 
-Do not split classes merely to reduce line count.
+## Anti-patterns
+- controllers containing business workflows
+- services that merely proxy every repository method
+- repositories making authorization decisions
+- services calling each other in circular chains
+- network calls inside DB transactions without strong justification
 
 ## Verification
-For each use case, be able to identify:
-- entry point
-- authorization boundary
-- business rules
-- data reads/writes
-- transaction boundary
-- external side effects
-- retry/idempotency behavior
-- failure behavior
-- tests
+For each use case identify entry point, authorization, business rules, data access, transaction boundary, side effects, retry behavior, and tests.

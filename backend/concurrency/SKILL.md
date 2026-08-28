@@ -1,59 +1,43 @@
 ---
 name: concurrency
-description: Analyze and prevent race conditions, lost updates, duplicate side effects, and inconsistent state in backend systems. Use for counters, inventory, payments, state transitions, unique resources, background workers, or any read-modify-write workflow.
+description: Prevent races, lost updates, duplicate side effects, and inconsistent shared state. Use for inventory, balances, counters, unique resources, state transitions, workers, payments, and read-modify-write flows.
 ---
 
 # Concurrency
 
-## Goal
-Assume important state may be modified by more than one request or worker at the same time.
+## Assume Concurrent Actors
+Requests, workers, cron jobs, and retries can overlap unless explicitly prevented.
 
-## Identify Race-Prone Patterns
-Treat these as suspicious until analyzed:
-- read -> calculate -> write
-- check if exists -> insert
-- check balance -> debit
-- read state -> decide -> update
+## Suspicious Patterns
+- check then insert
+- read then calculate then write
+- read balance then debit
+- read status then update
 - increment in application memory
-- process job -> mark complete
+- process then mark complete
 
-The time between the read and write is an opportunity for another actor to change state.
+## Prefer the Smallest Correct Mechanism
+1. Database constraint
+2. Atomic SQL statement
+3. Optimistic locking
+4. Row locking
+5. Appropriate transaction isolation
+6. Distributed lock only when genuinely necessary
 
-## Preferred Controls
-Choose the smallest mechanism that protects the invariant:
-1. database constraint
-2. atomic SQL update
-3. optimistic locking/version column
-4. row lock/select-for-update
-5. transaction isolation
-6. distributed lock only when database/application mechanisms are insufficient
+## Database Constraints
+For uniqueness, enforce uniqueness in the database and translate the resulting conflict. A preliminary existence check is not sufficient.
 
-Do not reach for Redis/distributed locks automatically.
-
-## PostgreSQL Locking
-PostgreSQL row locks can block conflicting updates/deletes and `SELECT ... FOR UPDATE` on the same rows until the transaction ends. Use explicit locking when the business invariant requires serial access to a row. 
-
-## Unique Races
-The safe pattern for uniqueness is usually:
-- enforce uniqueness in the database
-- attempt the write
-- translate a unique violation into the appropriate application conflict
-
-Do not depend on "check first, then insert" alone.
-
-## Atomic Updates
-Prefer an invariant-preserving SQL operation when possible.
-
-Example concept:
-`UPDATE accounts SET balance = balance - amount WHERE id = ? AND balance >= amount`
-
-Then verify affected-row count rather than doing an unsafe read-modify-write in application code.
+## Atomic Operations
+Prefer a single conditional update when it can express the invariant. Verify affected-row count.
 
 ## Optimistic Locking
-Use version/timestamp checks when conflicts are possible but contention is relatively low and retrying/rejecting stale writes is acceptable.
+Useful when conflicts are possible but relatively infrequent and stale writes can be rejected/retried.
+
+## Row Locks
+Use row locks when the invariant requires serialized access to the same records. Keep lock duration short and acquire multiple locks in a consistent order where possible to reduce deadlock risk.
 
 ## Idempotency
-For retried commands that create external effects, identify the command with an idempotency key and persist the result/state needed to make repeated submissions safe.
+For retried commands with side effects, persist an idempotency key/result or equivalent deduplication state.
 
 ## Verification
-Include concurrency tests for critical operations. Run multiple concurrent requests/workers and verify the invariant still holds.
+Write concurrency tests for critical invariants. Do not rely solely on single-threaded unit tests.

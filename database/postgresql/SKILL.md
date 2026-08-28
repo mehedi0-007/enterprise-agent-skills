@@ -1,95 +1,50 @@
 ---
 name: postgresql
-description: Design, query, review, and troubleshoot PostgreSQL-backed applications. Use for schema design, SQL, indexes, transactions, constraints, query plans, migrations, and database performance decisions.
+description: Design and review PostgreSQL schemas, SQL, constraints, transactions, indexes, and operational database behavior. Use for PostgreSQL-specific decisions and when database correctness or performance matters.
 ---
 
 # PostgreSQL
 
-## Goal
-Use PostgreSQL features deliberately, preserving correctness first and optimizing based on evidence.
+## Core Rules
+- Use explicit constraints for database-enforceable invariants.
+- Choose data types deliberately.
+- Parameterize values.
+- Avoid unbounded reads.
+- Understand NULL semantics.
+- Design transactions around business invariants.
+- Measure before optimizing.
 
-## Schema Design
+## Schema
 Prefer:
-- explicit primary keys
-- foreign keys for real relationships
-- NOT NULL where absence is invalid
-- UNIQUE constraints for invariants
-- CHECK constraints for database-enforceable rules
-- appropriate data types
-- timestamps with a clearly defined timezone convention
+- primary keys
+- foreign keys
+- NOT NULL when absence is invalid
+- UNIQUE for uniqueness
+- CHECK for local invariants
 
-Do not rely solely on application validation for invariants that must never be violated.
+Do not rely exclusively on application checks for invariants that must never be violated.
 
-## Query Design
-- Select only needed columns.
-- Avoid accidental N+1 queries.
-- Use joins deliberately.
-- Avoid unbounded result sets.
-- Prefer keyset pagination for large/high-churn datasets when appropriate.
-- Parameterize values; never construct SQL by string concatenation.
+## Query Review
+Check:
+- N+1
+- unnecessary columns
+- duplicate rows from joins
+- unstable pagination
+- implicit casts
+- expensive sorts/aggregations
+- unbounded results
 
-## Transactions
-Define the smallest atomic unit required by the business invariant.
-Understand isolation level and locking before changing them.
-Design explicitly for concurrent requests.
+## Performance
+Use EXPLAIN to inspect planner decisions. Use EXPLAIN ANALYZE carefully because it executes the statement.
 
 ## Indexes
-Indexes improve reads but add storage and write/update overhead.
-Do not add an index solely because a column appears in a WHERE clause.
+Indexes have read benefits and write/storage costs. Evaluate workload, selectivity, query predicates, ordering, and existing indexes before adding one.
 
-Before adding an index, inspect:
-- actual query frequency
-- table size
-- selectivity/cardinality
-- existing indexes
-- ORDER BY/GROUP BY needs
-- write cost
-- query plan
+## Concurrency
+Understand transaction isolation, locks, constraints, and atomic updates before changing concurrency behavior.
 
-For multicolumn B-tree indexes, column order matters; leading equality constraints and the first non-equality constraint are particularly important.
-
-Consider:
-- B-tree
-- GIN
-- GiST
-- BRIN
-- partial indexes
-- expression indexes
-- covering indexes
-
-only when the workload justifies them.
-
-## Query Performance
-When a query is slow:
-1. reproduce with representative data
-2. run EXPLAIN
-3. use EXPLAIN ANALYZE when safe and appropriate
-4. inspect row estimates vs actual rows
-5. inspect scan type, joins, sorting, buffers, and execution time
-6. identify the bottleneck
-7. change one important variable
-8. measure again
-
-Do not declare a query optimized without evidence.
-
-## Correctness
-Watch for:
-- missing joins
-- duplicate rows
-- incorrect NULL semantics
-- race conditions
-- lost updates
-- incorrect transaction boundaries
-- timezone mistakes
-- implicit casts
-- pagination instability
-
-## Verification
-Database changes should include:
-- migration
-- rollback/forward compatibility consideration
-- constraint review
-- index review
-- representative query testing
-- concurrency considerations
-- backup/recovery implications for risky changes
+## References
+See sibling skills:
+- `query-optimization`
+- `indexing`
+- `migrations`

@@ -1,41 +1,46 @@
 ---
 name: requirements-analysis
-description: Turn ambiguous feature requests into explicit, testable requirements and acceptance criteria. Use before implementing a non-trivial feature, when requirements are incomplete, or when behavior could be interpreted multiple ways.
+description: Turn ambiguous feature requests into explicit, testable requirements. Use when a request is incomplete, behavior is ambiguous, scope is non-trivial, or implementation could reasonably differ.
 ---
 
 # Requirements Analysis
 
-## Goal
-Understand what must be built before deciding how to build it.
+## Mission
+Understand the problem and observable behavior before choosing implementation.
 
-## Workflow
-1. Inspect the existing product and relevant code before proposing changes.
-2. Identify the user/problem, desired outcome, scope, constraints, and non-goals.
-3. Separate explicit requirements from assumptions.
-4. Identify actors, permissions, inputs, outputs, state transitions, and failure cases.
-5. Identify business rules and invariants that must always hold.
-6. Identify integration, data, compatibility, security, and operational constraints.
-7. Convert requirements into observable acceptance criteria.
-8. Resolve materially ambiguous requirements with the user; do not silently invent business behavior.
-9. Keep the smallest scope that satisfies the stated outcome.
+## Activation
+Use for new features, changes to existing behavior, integrations, workflows, permissions, data changes, or bug fixes whose intended behavior is unclear.
+
+## Procedure
+1. Inspect the existing product, architecture, conventions, and related code.
+2. Identify actor, goal, trigger, inputs, outputs, state changes, business rules, constraints, and non-goals.
+3. Separate facts from assumptions.
+4. Identify happy path and failure paths.
+5. Identify authorization, data ownership, concurrency, retry, and external-dependency concerns.
+6. Convert behavior into acceptance criteria.
+7. Resolve material ambiguity instead of inventing business rules.
+8. Prefer the smallest scope that solves the stated problem.
+
+## Decision Table
+
+| Question | If yes | If no |
+|---|---|---|
+| Can this operation be retried? | Define idempotency/replay behavior | Document why not |
+| Does it mutate shared state? | Analyze transaction/concurrency | Simpler flow may suffice |
+| Does it expose data? | Define authorization + field exposure | Continue |
+| Can it be unbounded? | Add limits/pagination | Continue |
+| Does it call an external system? | Define timeout/retry/failure semantics | Continue |
 
 ## Acceptance Criteria
 Prefer observable statements:
-- Given [state], when [action], then [result].
-- Include success, validation failure, authorization failure, not-found, conflict, and dependency-failure cases when relevant.
-- Include idempotency/retry behavior for operations that can be repeated.
+Given [state], when [action], then [result].
+Cover validation, authorization, not-found, conflict, dependency failure, retries, and concurrency when relevant.
 
-## Avoid
-- Coding before understanding the behavior.
+## Anti-patterns
+- Coding from a vague request.
 - Treating assumptions as requirements.
-- Adding speculative features.
-- Requiring implementation details in product requirements unless they are actual constraints.
+- Designing APIs from database tables without considering clients.
+- Adding speculative functionality.
 
 ## Verification
-Before implementation begins, be able to state:
-- What problem is solved.
-- Who can perform the action.
-- What inputs are accepted.
-- What outputs/state changes occur.
-- What happens on failure.
-- How success can be tested.
+Before implementation, be able to explain what success means, who can perform the operation, what changes, what can fail, and how it will be tested.

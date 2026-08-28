@@ -1,70 +1,58 @@
 ---
 name: indexing
-description: Choose, review, and troubleshoot PostgreSQL indexes based on workload evidence. Use when queries need faster lookup/order/join behavior, when adding or removing indexes, or when index bloat/write overhead is a concern.
+description: Choose and review PostgreSQL indexes based on actual workload and query plans. Use when adding, changing, removing, or troubleshooting indexes.
 ---
 
 # Indexing
 
-## Principle
-Indexes are workload-specific structures with storage and write/update costs. Do not index every filtered column.
-
-## Before Adding an Index
+## Before Adding
 Inspect:
-- actual query shape
-- frequency and latency
-- table size and growth
-- selectivity/cardinality
+- real query
+- frequency
+- table size/growth
+- selectivity
 - existing indexes
-- WHERE predicates
-- JOIN conditions
-- ORDER BY/GROUP BY
-- write/update rate
-
-Use EXPLAIN/EXPLAIN ANALYZE to determine whether the planner can benefit from the index.
+- WHERE/JOIN predicates
+- ORDER BY
+- write/update frequency
 
 ## B-tree
-Use B-tree for the common equality/range/order cases:
-- `=`
-- `<`, `<=`, `>`, `>=`
-- ordered retrieval
-- many ordinary lookup patterns
+Default choice for common equality, range, and ordering patterns.
 
-## Composite Indexes
-Column order matters.
-Design the index around actual predicates and ordering, not the order columns happen to appear in a table.
+## Composite Index
+Design column order from actual predicate/order patterns. Equality predicates and range/order behavior matter; don't simply mirror table column order.
 
-Consider which predicates are equality conditions, which are ranges, and whether the same index can support required ordering.
+## Partial Index
+Useful when a stable subset is queried frequently.
 
-## Partial Indexes
-Use when only a subset of rows is queried frequently and the predicate is stable and meaningful.
+## Expression Index
+Useful when the same deterministic expression is repeatedly used in predicates and an expression index matches the query.
 
-Example concept:
-an index only for active records rather than every historical record.
+## Included Columns
+Consider covering behavior when avoiding heap access materially improves a hot query and index size/write cost is acceptable.
 
-## Expression Indexes
-Useful when queries consistently filter on a deterministic expression and the expression index matches the query.
+## Specialized Indexes
+Evaluate GIN, GiST, BRIN, and other types from operator/workload requirements rather than data type alone.
 
-## Covering / Included Columns
-Consider included columns when avoiding heap access is valuable and the workload justifies the additional index size.
-
-## Specialized Types
-Evaluate GIN, GiST, BRIN, and other index types for workloads where their operator classes and access patterns fit. Do not choose an index type from the column data type alone.
-
-## Write Cost
-Every additional index can add:
-- disk usage
+## Costs
+Indexes consume:
+- disk
+- cache
 - write/update work
-- maintenance overhead
+- maintenance
 
-For high-write tables, require stronger evidence before adding indexes.
+High-write tables require stronger evidence.
 
-## Redundant Indexes
-Before adding an index, inspect existing indexes for overlap. Remove/rework redundant indexes only after measuring workload impact.
+## Decision Tree
+
+Need faster query?
+→ inspect EXPLAIN
+→ can query shape be simplified?
+→ is existing index usable?
+→ is predicate selective?
+→ is a composite/partial/expression index appropriate?
+→ measure after change
+→ check write impact
 
 ## Verification
-After index creation:
-- confirm the intended query can use it
-- compare execution plan and latency
-- test representative parameters
-- consider write overhead
-- document why the index exists
+Confirm the target query uses or benefits from the index and compare representative performance before/after.

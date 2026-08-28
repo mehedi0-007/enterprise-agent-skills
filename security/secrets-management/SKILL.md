@@ -1,83 +1,43 @@
 ---
 name: secrets-management
-description: Design, store, rotate, revoke, audit, and use application secrets safely. Use for API keys, database credentials, signing keys, certificates, tokens, CI/CD credentials, and environment configuration.
+description: Safely provision, use, rotate, revoke, and audit application secrets. Use for API keys, database credentials, signing keys, certificates, CI/CD credentials, and runtime secrets.
 ---
 
 # Secrets Management
 
-## Goal
-Minimize secret exposure, scope, lifetime, and blast radius.
-
 ## Never
-Do not:
-- commit secrets to source control
+- commit secrets
 - hardcode production credentials
 - log raw secrets
-- expose secrets in API responses
-- put secrets in client-side bundles
-- share one credential across unrelated systems when avoidable
-
-## Centralize
-Use an appropriate secret-management mechanism for the environment:
-- managed cloud secret store
-- dedicated secret manager
-- CI/CD secret store
-- short-lived workload identity where available
-
-Choose based on operational context; do not introduce a heavyweight secret manager without a real need.
-
-## Least Privilege
-Each service/account should receive only the secrets and permissions it needs.
-Do not give every application access to every environment secret.
+- expose secrets to browser bundles
+- return secrets through APIs
+- reuse production credentials casually in development
 
 ## Lifecycle
-Treat every secret as having:
-1. creation
-2. provisioning
-3. use
-4. rotation
-5. revocation
-6. expiration/decommissioning
+Every secret needs:
+creation → provisioning → use → rotation → revocation → decommissioning
 
-Prefer automated rotation where practical.
+## Least Privilege
+Scope credentials to the smallest workload/resource/environment.
 
-## Environment Separation
-Production credentials must not be reused casually in development/test.
-Use separate accounts/keys and minimum permissions.
+## Storage
+Prefer the environment's appropriate secret store or short-lived workload identity. Do not introduce complex infrastructure without operational justification.
 
 ## CI/CD
-Ensure:
-- secrets are injected securely
-- pipeline output cannot reveal them
-- forks/PRs cannot unexpectedly access privileged secrets
-- service accounts have narrowly scoped permissions
-- secret access is auditable
+Protect secrets from:
+- PRs/forks
+- build logs
+- artifacts
+- shell tracing
+- overly broad service accounts
 
-## Tokens and Signing Keys
-Define:
-- issuer
-- audience/scope
-- lifetime
-- rotation
-- revocation/rollover strategy
-- old-key compatibility window where required
-
-## Detection
-Use secret scanning and review tools where available.
-If a secret is exposed, treat it as compromised:
+## Exposure Response
+If a secret is exposed:
 1. revoke/rotate
 2. assess blast radius
 3. inspect access logs
-4. remove the secret from source/history where appropriate
-5. document the incident
+4. remove exposure from source/history where appropriate
+5. document remediation
 
 ## Verification
-Review:
-- source control
-- logs
-- CI/CD configuration
-- runtime environment
-- client bundles
-- error messages
-- monitoring
-for accidental secret exposure.
+Review source, logs, CI/CD, runtime environment, client bundles, and error paths for leakage.

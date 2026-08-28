@@ -1,85 +1,51 @@
 ---
 name: authentication
-description: Design and review secure user and service authentication. Use for login, registration, password changes, OTP, sessions, JWTs, refresh tokens, MFA, identity providers, and account recovery.
+description: Design and review secure authentication, sessions, passwords, OTP, refresh tokens, MFA, identity providers, and account recovery. Use whenever identity establishment or credential lifecycle changes.
 ---
 
 # Authentication
 
-## Goal
-Establish identity securely while minimizing credential exposure and session/token risk.
-
-## Separate Authentication From Authorization
-Authentication answers "Who are you?"
-Authorization answers "Are you allowed to do this?"
-Never treat a valid login as permission to access every resource.
+## Separate AuthN and AuthZ
+Authentication establishes identity. Authorization decides access.
 
 ## Passwords
-- Never store plaintext or reversible passwords.
-- Use a modern password-hashing algorithm supported by the platform/library.
-- Do not invent cryptographic algorithms.
-- Apply appropriate password policy without unnecessarily harming usability.
-- Protect login and recovery flows against brute force and enumeration.
+- Never store plaintext/reversible passwords.
+- Use a maintained password-hashing algorithm/library.
+- Rate-limit credential attacks.
+- Avoid user enumeration through distinguishable login/recovery responses.
 
-## Sessions and Tokens
-For every session/token design, define:
+## Sessions/Tokens
+Define:
 - lifetime
-- renewal/refresh
+- renewal
 - revocation
-- storage
-- transport
-- scope/audience
+- storage/transport
+- audience/scope
 - rotation
 - replay behavior
 - logout behavior
 
-Bearer tokens must be treated as credentials.
-
-For browser applications, prefer secure cookie/session patterns when appropriate; if tokens are used, understand the XSS/CSRF tradeoffs before choosing storage.
+Treat bearer tokens as credentials.
 
 ## Refresh Tokens
-For refresh-token systems:
-- use sufficiently unpredictable tokens
-- define expiration
-- consider rotation
-- detect/revoke reuse where appropriate
-- bind sessions to a manageable device/session record when required
-- do not log raw tokens
+Use unpredictable tokens. Define expiration, rotation/reuse detection where appropriate, revocation, session ownership, and safe storage. Never log raw tokens.
 
-## OTP / Recovery Codes
-OTP and recovery flows should define:
-- cryptographically secure generation
+## OTP
+OTP flows need:
+- secure generation
 - short expiration
 - single use
-- attempt limits
-- resend limits
+- attempt/resend limits
 - rate limiting
 - replay protection
 - enumeration resistance
-- safe storage (never plaintext when persistence is required)
-
-## MFA
-Treat each factor as a credential with its own lifecycle, recovery, and revocation considerations.
-
-## External Identity Providers
-Validate issuer, audience, signature, token lifetime, and required claims according to the provider/protocol. Do not trust decoded token contents without cryptographic validation.
+- safe persistence
 
 ## Account Recovery
-Recovery can be as powerful as login. Apply equivalent protection:
-- rate limits
-- anti-enumeration behavior
-- short-lived recovery artifacts
-- revocation after use
-- audit events for sensitive changes
+Recovery must be protected as strongly as login. Revoke/expire recovery artifacts after use.
+
+## External Identity
+Validate issuer, audience, signature, lifetime, and required claims. Decoding a token is not validation.
 
 ## Verification
-Test:
-- invalid credentials
-- expired credentials
-- revoked sessions/tokens
-- replay
-- brute-force/rate limits
-- enumeration resistance
-- logout/revocation
-- recovery
-- concurrent refresh
-- privilege changes after authentication
+Test expiry, replay, revocation, concurrent refresh, brute force, enumeration, logout, recovery, and privilege changes.

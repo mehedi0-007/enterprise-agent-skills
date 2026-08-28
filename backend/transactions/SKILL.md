@@ -1,61 +1,39 @@
 ---
 name: transactions
-description: Design transaction boundaries and atomicity for backend workflows. Use when multiple reads/writes must satisfy an invariant, when implementing financial/state transitions, or when concurrency can produce inconsistent state.
+description: Define database transaction boundaries and atomicity for backend workflows. Use when multiple writes must satisfy an invariant, when state transitions can race, or when failure consistency matters.
 ---
 
 # Transactions
 
-## Purpose
-Use transactions to protect specific correctness invariants, not as a blanket wrapper around every service.
-
-## Define the Invariant First
-Before opening a transaction, identify what must be true if the operation succeeds.
+## Start With the Invariant
+Ask what must be true after success and impossible after failure.
 
 Examples:
-- order and order items are created together
-- inventory cannot become negative
-- a unique business state transition occurs once
-- a transfer debits one account and credits another atomically
+- order and order items commit together
+- inventory cannot go below zero
+- two sides of a transfer change atomically
+- state transition happens once
 
 ## Boundary
-The transaction should normally surround the smallest set of database operations that must commit or roll back together.
-
+Keep the transaction around the smallest atomic database unit.
 Avoid:
-- long-running transactions
-- user interaction inside a transaction
-- network calls inside a database transaction unless deliberately justified
-- background work that holds a transaction open
+- user interaction inside transactions
+- slow external HTTP calls inside DB transactions
+- unnecessary long-running transactions
 
 ## Isolation
-Understand the isolation level before relying on a read-then-write pattern. PostgreSQL uses Read Committed by default; stronger isolation can change failure/retry behavior. Applications using Serializable must be prepared to retry serialization failures. 
+Understand the actual isolation level and its consequences. PostgreSQL defaults to Read Committed; stronger isolation can introduce serialization failures that must be retried.
 
-## Concurrency
-Ask:
-- Can two requests execute this use case simultaneously?
-- Can both read the same old state?
-- Is a constraint enough?
-- Is row locking required?
-- Would an atomic UPDATE be safer?
-- Is optimistic locking appropriate?
-- Does the caller need an idempotency key?
+## Read-Modify-Write
+A transaction alone does not automatically make every read-modify-write safe under concurrency. Determine whether you need:
+- atomic SQL
+- row locks
+- optimistic locking
+- stronger isolation
+- database constraints
 
-## External Side Effects
-A database transaction cannot automatically roll back an email, payment, webhook, or queue publish performed outside the database.
-
-For important workflows consider:
-- transactional outbox
-- post-commit dispatch
-- idempotency
-- reconciliation
-
-## Failure Handling
-A rollback is not necessarily a user-visible 500. Translate known constraint/conflict failures to stable application errors.
+## External Effects
+DB rollback cannot undo an email/payment/webhook. For important workflows consider transactional outbox, post-commit dispatch, idempotency, and reconciliation.
 
 ## Verification
-Test:
-- atomic success
-- rollback on failure
-- concurrent execution
-- duplicate requests
-- deadlock/serialization retry behavior where relevant
-- external side-effect failure behavior
+Test rollback, concurrent execution, duplicate requests, constraint conflicts, and retry behavior.

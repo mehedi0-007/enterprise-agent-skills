@@ -1,93 +1,50 @@
 ---
 name: api-security
-description: Threat-model and review API endpoints for common security failures. Use when creating or modifying APIs, webhooks, file endpoints, external integrations, or sensitive business flows.
+description: Threat-model and review API endpoints for authorization, authentication, resource abuse, SSRF, unsafe input, sensitive business flows, and inventory/configuration risks. Use for new or modified APIs and webhooks.
 ---
 
 # API Security
 
-## Threat Model First
-For a new endpoint identify:
+## Threat Model
+Identify:
 - attacker-controlled inputs
-- authenticated identity
-- authorization boundary
+- trust boundaries
 - sensitive data
+- state changes
 - expensive operations
 - external destinations
-- state changes
-- replay/automation opportunities
-- trust boundaries
+- retry/replay opportunities
+- authorization object and tenant
 
 ## OWASP API Risks
-Use the OWASP API Security Top 10 as a review checklist, especially:
-- broken object-level authorization
+Review against the OWASP API Security Top 10 2023:
+- BOLA
 - broken authentication
-- broken object property-level authorization
+- broken object property authorization
 - unrestricted resource consumption
-- broken function-level authorization
-- unrestricted access to sensitive business flows
+- broken function authorization
+- sensitive business-flow abuse
 - SSRF
 - security misconfiguration
 - improper inventory management
-- unsafe consumption of APIs
+- unsafe API consumption
 
-OWASP highlights authorization as a major recurring API security challenge.
-
-## Input
-Validate:
-- body
-- path parameters
-- query parameters
-- headers
-- content type
-- file metadata
-- webhook payloads
-
-Use allow-lists where practical.
-
-## Resource Consumption
-Bound:
-- request body size
-- pagination limits
-- upload size
-- expensive query parameters
-- batch sizes
-- polling frequency
-- authentication attempts
-- expensive business operations
-
-Use rate limiting and quotas appropriate to the business risk.
-
-## Object Authorization
-Never assume an authenticated user may access an object just because they know its ID.
-Enforce ownership/relationship/permission server-side.
-
-## Property Authorization
-Do not mass-assign security-sensitive properties such as:
-- role
-- ownerId
-- tenantId
-- verified
-- accountStatus
-- price
-unless the operation explicitly authorizes those changes.
+## Limits
+Bound request body, file uploads, pagination, batch operations, expensive queries, authentication attempts, and sensitive business flows.
 
 ## SSRF
-When accepting URLs or making server-side requests:
-- restrict allowed schemes
+For server-side URLs:
+- allow only required schemes
 - validate destinations
-- avoid unrestricted private/internal address access
 - consider redirects
-- use network-level egress controls where possible
-- do not rely solely on hostname string checks
+- restrict private/internal network access
+- apply network egress controls where possible
 
 ## Webhooks
-Verify authenticity/signature where supported.
-Handle replay and duplicate delivery.
-Make processing idempotent.
-Do not trust webhook fields as authorization decisions without validating their source and context.
+Verify signatures/authenticity, handle replay/duplicates, make processing idempotent, and define retry semantics.
 
-## API Inventory
-Know which endpoints, versions, internal routes, admin routes, and deprecated versions are deployed. Remove or protect forgotten endpoints.
+## Property Exposure
+Do not mass-assign fields such as role, owner, tenant, status, verification, or price unless explicitly authorized.
 
 ## Verification
-Review both positive and negative authorization cases and abuse scenarios. Test limits and malformed input, not only happy paths.
+Test abuse and negative authorization cases, not only valid requests.
