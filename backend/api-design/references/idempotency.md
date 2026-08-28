@@ -1,21 +1,15 @@
 # API Idempotency
 
-## Use When
-Retries can cause duplicate business effects and the operation can be identified safely.
+A request can succeed on the server even when the client never receives the response. A retry can therefore duplicate side effects.
 
-High-value examples:
-- payment initiation
-- provisioning
-- order creation
-- sending an expensive external command
+When an idempotency key is appropriate:
+1. Scope it to the principal and logical operation.
+2. Persist state durably.
+3. Protect the key with a uniqueness/concurrency mechanism.
+4. Make concurrent duplicates safe.
+5. Define behavior for a reused key with a different payload.
+6. Return a deterministic result/conflict.
 
-## Design
-1. Client generates idempotency key.
-2. Server authenticates and scopes the key to the principal/operation.
-3. Server records request/result state durably.
-4. First request executes.
-5. Repeated equivalent request returns the recorded result or a defined conflict.
-6. Concurrent duplicates are serialized/deduplicated.
+For external side effects, coordinate application/database idempotency with the provider's own idempotency mechanism or an outbox/reconciliation strategy.
 
-## Important
-An idempotency key alone is not enough if the database cannot safely enforce concurrent uniqueness or the external side effect is not idempotent.
+An idempotency key without concurrency protection is incomplete.
