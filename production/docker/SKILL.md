@@ -599,3 +599,7 @@ Security settings break the application without documented testing.
 - `references/secrets-and-builds.md`
 - `references/health-and-shutdown.md`
 - `references/image-security.md`
+
+## Cross-Skill Routing
+For pipeline/build promotion behavior, coordinate with `ci-cd`.
+For live rollout/runtime health and recovery, coordinate with `deployment`.

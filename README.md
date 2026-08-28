@@ -1,5 +1,14 @@
-# V2 Frontend Routing Fix
+# V2 Production Consistency Patch
 
-Adds the missing explicit `Cross-Skill Routing` sections reported by the frontend semantic checker.
+Adds:
+- canonical production skill ownership
+- production cross-skill conflict rules
+- production routing checker
+- idempotent routing patcher
 
-Only missing sections are added; existing skill content is preserved.
+Run:
+
+```bash
+python3 scripts/add-production-routing-v2.py
+python3 scripts/check-production-routing.py
+```

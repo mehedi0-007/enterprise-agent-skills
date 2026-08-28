@@ -754,3 +754,7 @@ Instrumentation breaks silently.
 - `references/health-probes.md`
 - `references/alerts-slos.md`
 - `references/incident-diagnosis.md`
+
+## Cross-Skill Routing
+For release/rollout correlation and health gates, coordinate with `deployment`.
+For performance diagnosis and optimization, coordinate with `performance`.

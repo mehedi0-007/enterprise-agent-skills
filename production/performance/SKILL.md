@@ -662,3 +662,7 @@ Optimization assumed successful without production evidence.
 - `references/load-testing.md`
 - `references/frontend-performance.md`
 - `references/capacity.md`
+
+## Cross-Skill Routing
+For telemetry and measured performance evidence, coordinate with `observability`.
+For slow database access paths, coordinate with `query-optimization`.
