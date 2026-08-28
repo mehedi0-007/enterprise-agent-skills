@@ -613,3 +613,23 @@ Short monitoring windows miss rare but critical workloads.
 - `references/specialized-indexes.md`
 - `references/index-lifecycle.md`
 - `references/production-index-builds.md`
+
+## Review Procedure
+
+1. Identify the measured query/workload.
+2. Inspect current plan and existing indexes.
+3. Determine whether query shape can be improved first.
+4. Choose index type/columns/order/predicate from actual access patterns.
+5. Evaluate write/storage/maintenance cost.
+6. Plan safe production creation.
+7. Measure the result and check regressions.
+
+## Verification Checklist
+
+- [ ] workload evidence exists
+- [ ] existing indexes reviewed
+- [ ] index shape matches query pattern
+- [ ] selectivity/order considered
+- [ ] write/storage cost considered
+- [ ] build strategy is safe
+- [ ] before/after measurement captured

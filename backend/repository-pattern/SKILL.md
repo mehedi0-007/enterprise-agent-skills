@@ -575,3 +575,23 @@ Code looks clean while relation access triggers hundreds of queries.
 - [ ] Bulk operations preserve invariants.
 - [ ] Integration tests cover important DB behavior.
 - [ ] Performance-sensitive queries are measured.
+
+## Review Procedure
+
+1. Identify the exact persistence operation the use case needs.
+2. Decide whether a repository abstraction adds meaningful value.
+3. Review projection, query count, pagination, and trusted tenant/object scope.
+4. Check transaction participation and concurrency semantics.
+5. Inspect ORM leakage and persistence error translation.
+6. Verify query behavior with integration tests.
+
+## Verification Checklist
+
+- [ ] abstraction justified
+- [ ] method intent is clear
+- [ ] data access is bounded
+- [ ] N+1/over-fetching reviewed
+- [ ] tenant/object scope correct
+- [ ] transaction/concurrency assumptions explicit
+- [ ] persistence errors safely translated
+- [ ] DB integration behavior tested

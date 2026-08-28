@@ -44,3 +44,22 @@ Cover validation, authorization, not-found, conflict, dependency failure, retrie
 
 ## Verification
 Before implementation, be able to explain what success means, who can perform the operation, what changes, what can fail, and how it will be tested.
+
+## Review Procedure
+
+1. Identify the user/business outcome.
+2. Separate must-have scope from assumptions.
+3. Define actors, inputs, outputs, states, and constraints.
+4. Capture edge cases and failure behavior.
+5. Define acceptance criteria that can be verified.
+6. Identify unresolved risk without inventing product policy.
+
+## Verification Checklist
+
+- [ ] goal is explicit
+- [ ] actors/stakeholders identified
+- [ ] scope bounded
+- [ ] acceptance criteria testable
+- [ ] edge/failure cases listed
+- [ ] assumptions documented
+- [ ] ambiguity called out

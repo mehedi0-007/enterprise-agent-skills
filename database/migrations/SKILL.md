@@ -640,3 +640,23 @@ No estimate/monitoring/recovery strategy for a large production migration.
 - `references/locks-and-indexes.md`
 - `references/rollback-and-recovery.md`
 - `references/migration-risk-matrix.md`
+
+## Review Procedure
+
+1. Identify affected readers, writers, workers, and consumers.
+2. Classify risk and reversibility.
+3. Check old/new application compatibility.
+4. Design expand/migrate/contract when needed.
+5. Plan locks, backfill, monitoring, and recovery.
+6. Verify data invariants before destructive cleanup.
+7. Validate post-migration application behavior.
+
+## Verification Checklist
+
+- [ ] dependencies inventoried
+- [ ] compatibility window understood
+- [ ] risk/recovery classified
+- [ ] backfill is bounded/restartable
+- [ ] lock impact reviewed
+- [ ] destructive step gated by evidence
+- [ ] post-migration invariants verified

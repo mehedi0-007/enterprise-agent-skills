@@ -80,3 +80,27 @@ For consequential decisions record context, decision, alternatives, consequences
 
 ## Verification
 A design is ready when ownership, boundaries, failure behavior, transaction semantics, testing boundaries, and migration/rollback implications are explicit.
+
+## Activation
+
+Use when creating or changing system/module boundaries, dependencies, data ownership, integration patterns, or major technical design.
+
+## Review Procedure
+
+1. State requirements and constraints.
+2. Identify bounded responsibilities and ownership.
+3. Map data/control flow and trust boundaries.
+4. Compare simple and more complex options.
+5. Review failure, scaling, operability, security, and migration implications.
+6. Make assumptions and tradeoffs explicit.
+7. Verify the architecture against realistic workflows.
+
+## Verification Checklist
+
+- [ ] requirements drive the design
+- [ ] responsibilities are cohesive
+- [ ] dependency direction is clear
+- [ ] data ownership is explicit
+- [ ] failure modes considered
+- [ ] security/operability considered
+- [ ] migration/rollback implications considered

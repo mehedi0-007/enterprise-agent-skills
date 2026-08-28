@@ -724,3 +724,22 @@ One authorized item makes the entire batch trusted.
 - `references/ssrf.md`
 - `references/webhooks.md`
 - `references/bulk-endpoints.md`
+
+## Review Procedure
+
+1. Identify endpoint principal, asset, action, and trust boundaries.
+2. Check applicable OWASP API risks.
+3. Review authentication/authorization, object/property access, and tenant scope.
+4. Review resource abuse, SSRF, uploads, webhooks, replay, and external APIs.
+5. Review errors, auditability, and negative tests.
+6. Route detailed controls to specialized security skills.
+
+## Verification Checklist
+
+- [ ] object/function/property authorization reviewed
+- [ ] tenant isolation reviewed
+- [ ] resource abuse/rate limits reviewed
+- [ ] SSRF/upload/webhook risks reviewed where applicable
+- [ ] replay/idempotency reviewed
+- [ ] third-party responses treated as untrusted
+- [ ] negative security tests exist

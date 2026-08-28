@@ -669,3 +669,13 @@ Persistent high-trust machine executes attacker-controlled code.
 - `references/deployment-gates.md`
 - `references/retry-and-flakiness.md`
 - `references/runner-trust.md`
+
+## Review Procedure
+
+1. Identify every trigger and trust boundary.
+2. Inspect job permissions and secret access.
+3. Verify tests/build/security gates are meaningful.
+4. Verify artifact identity and promotion behavior.
+5. Review migration/environment/deployment compatibility.
+6. Review concurrency, runner trust, and third-party action risks.
+7. Verify post-deploy validation and recovery paths.

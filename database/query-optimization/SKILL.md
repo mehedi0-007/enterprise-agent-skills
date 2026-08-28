@@ -596,3 +596,24 @@ Executing expensive/mutating statements with ANALYZE without considering side ef
 - `references/n-plus-one-and-egress.md`
 - `references/pagination-and-sorting.md`
 - `references/optimization-priority.md`
+
+## Review Procedure
+
+1. Capture the real query/workload and baseline.
+2. Inspect generated SQL and execution plan.
+3. Compare estimated vs actual rows.
+4. Review scans, joins, sorts, loops, buffers, and application query count.
+5. Identify the dominant bottleneck.
+6. Apply the smallest justified change.
+7. Re-measure correctness, latency, and resource impact.
+
+## Verification Checklist
+
+- [ ] baseline captured
+- [ ] representative parameters used
+- [ ] generated SQL inspected
+- [ ] plan reviewed
+- [ ] cardinality/loops examined
+- [ ] N+1/payload/connection issues considered
+- [ ] change re-measured
+- [ ] correctness preserved

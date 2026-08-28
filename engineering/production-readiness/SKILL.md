@@ -78,3 +78,27 @@ Classify findings:
 
 ## Verification
 Run the appropriate build/typecheck/lint/tests and inspect the actual diff. Review security and operational implications before finalizing.
+
+## Review Procedure
+
+1. Verify functional correctness and tests.
+2. Review security, failure, performance, and operability.
+3. Verify configuration, secrets, migrations, and dependencies.
+4. Verify health/observability/alerts.
+5. Verify deployment/recovery strategy.
+6. Identify residual risks and evidence.
+
+## Verification Checklist
+
+- [ ] tests appropriate to risk pass
+- [ ] security reviewed
+- [ ] failure/recovery reviewed
+- [ ] migrations/config/secrets reviewed
+- [ ] observability/alerts ready
+- [ ] performance/capacity acceptable
+- [ ] deployment/rollback or forward-fix defined
+- [ ] residual risk documented
+
+## Activation
+
+Use when deciding whether a feature, service, or release is ready for production, especially when security, reliability, migrations, observability, or recovery risks are involved.

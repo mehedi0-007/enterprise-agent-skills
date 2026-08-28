@@ -244,3 +244,7 @@ For each async interaction ask:
 - `references/optimistic-concurrency.md`
 - `references/polling-jobs.md`
 - `references/testing-async-ui.md`
+
+## Activation
+
+Use when UI behavior depends on network/server work such as fetching, mutations, uploads, polling, retries, cancellation, optimistic updates, or background jobs.

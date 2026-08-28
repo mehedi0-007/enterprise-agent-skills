@@ -85,3 +85,27 @@ Inspect actual schemas, tests, SQL/migrations, UI states, and runtime configurat
 
 ## Verification
 For substantial features, document the cross-layer contracts and test the critical path end to end.
+
+## Activation
+
+Use when a feature crosses backend, database, security, frontend, infrastructure, or deployment boundaries.
+
+## Review Procedure
+
+1. Map the end-to-end feature flow.
+2. Identify contracts between layers.
+3. Check error/state/authorization semantics across boundaries.
+4. Check persistence, concurrency, and migration implications.
+5. Check frontend behavior against actual API semantics.
+6. Check observability and deployment implications.
+7. Verify the complete flow with representative tests.
+
+## Verification Checklist
+
+- [ ] contracts agree across layers
+- [ ] authorization matches actual operations
+- [ ] API errors map correctly to UX
+- [ ] DB/schema changes are compatible
+- [ ] async/concurrency behavior agrees
+- [ ] observability covers the flow
+- [ ] deployment/recovery path is coherent

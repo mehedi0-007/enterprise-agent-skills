@@ -45,3 +45,26 @@ Also use:
 
 ## Verification
 Test valid, invalid, boundary, null, omitted, oversized, unexpected, and malicious-looking inputs. Verify rejected inputs cannot reach sensitive operations.
+
+## Activation
+
+Use when validating request bodies, query/path parameters, commands, imported data, or other untrusted input.
+
+## Review Procedure
+
+1. Identify the trust boundary and authoritative source of truth.
+2. Validate shape/type/range/format.
+3. Separate structural validation from business rules and authorization.
+4. Define error mapping.
+5. Check size/depth/resource bounds.
+6. Verify server-side enforcement.
+
+## Verification Checklist
+
+- [ ] untrusted inputs identified
+- [ ] structural validation defined
+- [ ] business validation separated
+- [ ] authorization not delegated to validation
+- [ ] resource limits considered
+- [ ] stable error mapping defined
+- [ ] negative tests exist

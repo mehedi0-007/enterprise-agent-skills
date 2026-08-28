@@ -663,3 +663,22 @@ Secret scanning cannot prove absence of all secrets.
 - `references/rotation.md`
 - `references/cicd-and-workload-identity.md`
 - `references/incident-response.md`
+
+## Review Procedure
+
+1. Identify the credential and whether it is actually necessary.
+2. Prefer workload identity/short-lived credentials where supported.
+3. Review storage, provisioning, access, and least privilege.
+4. Review source/build/log/client exposure.
+5. Define rotation/revocation and emergency response.
+6. Verify CI/CD and audit controls.
+
+## Verification Checklist
+
+- [ ] secret necessity challenged
+- [ ] least privilege applied
+- [ ] storage/provisioning secure
+- [ ] source/build/client/log exposure reviewed
+- [ ] rotation/revocation defined
+- [ ] CI/CD exposure reviewed
+- [ ] incident response path exists

@@ -48,3 +48,26 @@ See sibling skills:
 - `query-optimization`
 - `indexing`
 - `migrations`
+
+## Activation
+
+Use when choosing PostgreSQL features, types, constraints, SQL semantics, transactions, locking, extensions, or database-specific behavior.
+
+## Review Procedure
+
+1. Identify the required database behavior.
+2. Check PostgreSQL semantics/version support.
+3. Prefer database constraints for enforceable invariants.
+4. Review transaction, locking, planner, and operational effects.
+5. Verify migration and deployment implications.
+6. Test against a representative PostgreSQL environment.
+
+## Verification Checklist
+
+- [ ] PostgreSQL-specific behavior is intentional
+- [ ] version compatibility checked
+- [ ] constraints considered
+- [ ] transaction/locking behavior understood
+- [ ] performance implications reviewed
+- [ ] migration/deployment impact reviewed
+- [ ] representative DB tests exist

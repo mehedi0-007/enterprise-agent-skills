@@ -85,3 +85,25 @@ Before completion:
 - verify deterministic behavior
 - run typecheck/build/lint where applicable
 - record tests actually run
+
+## Activation
+
+Use when deciding what tests to add or reviewing test coverage for new or changed behavior.
+
+## Review Procedure
+
+1. Identify risk and critical behavior.
+2. Choose unit/integration/contract/end-to-end tests accordingly.
+3. Include negative and concurrency/failure cases where relevant.
+4. Avoid tests that assert incidental implementation details.
+5. Run representative checks and inspect failures.
+6. Maintain deterministic, useful test data.
+
+## Verification Checklist
+
+- [ ] critical behavior covered
+- [ ] failure/negative paths covered
+- [ ] integration boundaries covered where needed
+- [ ] concurrency/security cases included where relevant
+- [ ] tests are deterministic
+- [ ] assertions verify behavior, not incidental implementation

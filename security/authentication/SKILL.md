@@ -679,3 +679,22 @@ Inventing cryptographic algorithms or token formats without necessity.
 - [ ] sensitive changes use appropriate step-up
 - [ ] audit/security events exist without secret leakage
 - [ ] integration/security tests exist
+
+## Review Procedure
+
+1. Identify the authentication model and trust boundary.
+2. Review credential/session/token lifecycle.
+3. Review storage, transport, expiry, revocation, and rotation.
+4. Review recovery, OTP/MFA, enumeration, and brute-force resistance.
+5. Review concurrent refresh/retry behavior.
+6. Verify audit and compromise-response behavior.
+
+## Verification Checklist
+
+- [ ] identity lifecycle defined
+- [ ] credential storage secure
+- [ ] session/token lifetime defined
+- [ ] revocation/rotation defined
+- [ ] recovery flows reviewed
+- [ ] enumeration/abuse controls reviewed
+- [ ] concurrent refresh/retry tested

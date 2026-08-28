@@ -47,3 +47,25 @@ Return a stable error code and safe message. Validation errors may include field
 
 ## Verification
 Test expected errors, conflicts, dependency timeouts, retries, unexpected exceptions, serialization, and information leakage.
+
+## Activation
+
+Use when designing or reviewing exceptions, API errors, validation failures, dependency failures, retries, logging, or user-facing failure behavior.
+
+## Review Procedure
+
+1. Classify the error: client/input, authentication, authorization, business conflict, dependency, or internal failure.
+2. Decide whether it is retryable.
+3. Preserve a stable machine-readable contract.
+4. Prevent sensitive/internal detail leakage.
+5. Ensure logs/telemetry contain useful diagnostic context.
+6. Verify behavior at API/UI boundaries.
+
+## Verification Checklist
+
+- [ ] error categories are deliberate
+- [ ] retryability is explicit
+- [ ] client contract is stable
+- [ ] sensitive details are not exposed
+- [ ] useful diagnostic context exists
+- [ ] relevant tests cover failure paths

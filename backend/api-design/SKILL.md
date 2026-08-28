@@ -344,3 +344,22 @@ Load when needed:
 - references/pagination.md
 - references/compatibility.md
 - references/error-contract.md
+
+## Review Procedure
+
+1. Identify resource/use-case and actor.
+2. Define request/response and HTTP semantics.
+3. Review validation, authorization, pagination, errors, retries, idempotency, and concurrency.
+4. Check external side effects and compatibility.
+5. Verify observability and tests before implementation.
+
+## Verification Checklist
+
+- [ ] contract is explicit
+- [ ] authorization boundary defined
+- [ ] validation and limits defined
+- [ ] status/error semantics defined
+- [ ] pagination/filter/sort bounded
+- [ ] retry/idempotency behavior reviewed
+- [ ] concurrency/external side effects reviewed
+- [ ] compatibility considered

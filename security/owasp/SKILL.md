@@ -527,3 +527,21 @@ Preventing compromise but ignoring rotation/revocation/recovery.
 - `references/owasp-mapping.md`
 - `references/threat-model-template.md`
 - `references/security-review-report.md`
+
+## Review Procedure
+
+1. Identify assets, principals, and trust boundaries.
+2. Map applicable OWASP risks.
+3. Route detailed analysis to the specialized security skill.
+4. Require evidence through negative tests and configuration review.
+5. Classify residual risk and remediation priority.
+6. Avoid unsupported claims of "OWASP compliant" or "secure.
+
+## Verification Checklist
+
+- [ ] applicable OWASP categories mapped
+- [ ] specialized security skills invoked
+- [ ] concrete controls identified
+- [ ] evidence/tests recorded
+- [ ] residual risk documented
+- [ ] unsupported security claims avoided
