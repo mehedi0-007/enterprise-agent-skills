@@ -1,9 +1,16 @@
-# V2 Structural Fix
+# V2 Semantic Routing
 
-The corrected boundary audit found only three missing required sections:
+This patch adds the canonical ownership/routing model for cross-skill consistency.
 
-- `engineering/production-readiness` → Activation
-- `frontend/async-ui-states` → Activation
-- `production/ci-cd` → Review Procedure
+Files:
+- `docs/semantic-routing-matrix.md`
+- `docs/semantic-conflict-rules.md`
+- `scripts/check-semantic-routing.py`
 
-This script adds only those missing sections and is safe to rerun.
+Run:
+
+```bash
+python3 scripts/check-semantic-routing.py
+```
+
+Unlike the earlier structural checker, this is intentionally advisory about missing routes: it identifies skills whose cross-layer handoffs deserve review rather than treating every missing mention as a hard implementation error.
