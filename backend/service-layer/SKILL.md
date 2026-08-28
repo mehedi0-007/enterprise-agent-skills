@@ -586,3 +586,8 @@ When reviewing a service implementation, inspect:
 - `references/placement-examples.md`
 - `references/transaction-side-effects.md`
 - `references/service-smells.md`
+
+## Cross-Skill Routing
+- For `repository-pattern` concerns, coordinate with the specialized skill rather than duplicating its implementation guidance.
+- For `transactions` concerns, coordinate with the specialized skill rather than duplicating its implementation guidance.
+- For `concurrency` concerns, coordinate with the specialized skill rather than duplicating its implementation guidance.

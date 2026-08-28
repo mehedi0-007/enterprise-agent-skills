@@ -595,3 +595,8 @@ Code looks clean while relation access triggers hundreds of queries.
 - [ ] transaction/concurrency assumptions explicit
 - [ ] persistence errors safely translated
 - [ ] DB integration behavior tested
+
+## Cross-Skill Routing
+- For `query-optimization` concerns, coordinate with the specialized skill rather than duplicating its implementation guidance.
+- For `postgresql` concerns, coordinate with the specialized skill rather than duplicating its implementation guidance.
+- For `authorization` concerns, coordinate with the specialized skill rather than duplicating its implementation guidance.

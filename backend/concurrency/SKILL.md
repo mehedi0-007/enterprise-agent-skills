@@ -616,3 +616,7 @@ Assuming webhook/queue events arrive in order without a provider guarantee.
 - `references/race-patterns.md`
 - `references/locking-vs-optimistic.md`
 - `references/idempotent-workers.md`
+
+## Cross-Skill Routing
+- For `transactions` concerns, coordinate with the specialized skill rather than duplicating its implementation guidance.
+- For `postgresql` concerns, coordinate with the specialized skill rather than duplicating its implementation guidance.

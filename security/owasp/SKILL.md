@@ -393,7 +393,7 @@ Security findings without reproducible test cases are harder to validate and reg
 ## 19. Evidence and Claims
 
 Do not say:
-- "OWASP compliant"
+- "formal OWASP certification"
 - "secure"
 - "production safe"
 - "no vulnerabilities"

@@ -698,3 +698,7 @@ Inventing cryptographic algorithms or token formats without necessity.
 - [ ] recovery flows reviewed
 - [ ] enumeration/abuse controls reviewed
 - [ ] concurrent refresh/retry tested
+
+## Cross-Skill Routing
+- For `api-security` concerns, coordinate with the specialized skill rather than duplicating its implementation guidance.
+- For `secrets-management` concerns, coordinate with the specialized skill rather than duplicating its implementation guidance.

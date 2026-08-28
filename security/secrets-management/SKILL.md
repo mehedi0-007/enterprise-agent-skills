@@ -682,3 +682,6 @@ Secret scanning cannot prove absence of all secrets.
 - [ ] rotation/revocation defined
 - [ ] CI/CD exposure reviewed
 - [ ] incident response path exists
+
+## Cross-Skill Routing
+- For `ci-cd` concerns, coordinate with the specialized skill rather than duplicating its implementation guidance.

@@ -69,3 +69,6 @@ Use when designing or reviewing exceptions, API errors, validation failures, dep
 - [ ] sensitive details are not exposed
 - [ ] useful diagnostic context exists
 - [ ] relevant tests cover failure paths
+
+## Cross-Skill Routing
+- For `api-design` concerns, coordinate with the specialized skill rather than duplicating its implementation guidance.

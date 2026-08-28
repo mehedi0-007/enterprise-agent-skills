@@ -68,3 +68,7 @@ Use when validating request bodies, query/path parameters, commands, imported da
 - [ ] resource limits considered
 - [ ] stable error mapping defined
 - [ ] negative tests exist
+
+## Cross-Skill Routing
+- For `api-design` concerns, coordinate with the specialized skill rather than duplicating its implementation guidance.
+- For `api-security` concerns, coordinate with the specialized skill rather than duplicating its implementation guidance.

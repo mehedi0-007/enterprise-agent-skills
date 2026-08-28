@@ -633,3 +633,7 @@ Short monitoring windows miss rare but critical workloads.
 - [ ] write/storage cost considered
 - [ ] build strategy is safe
 - [ ] before/after measurement captured
+
+## Cross-Skill Routing
+- For `query-optimization` concerns, coordinate with the specialized skill rather than duplicating its implementation guidance.
+- For `migrations` concerns, coordinate with the specialized skill rather than duplicating its implementation guidance.

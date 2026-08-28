@@ -788,3 +788,6 @@ Permission changes do not take effect predictably.
 - [ ] high-risk actions audited
 - [ ] negative tests exist
 - [ ] alternate/bulk endpoints reviewed
+
+## Cross-Skill Routing
+- For `api-security` concerns, coordinate with the specialized skill rather than duplicating its implementation guidance.

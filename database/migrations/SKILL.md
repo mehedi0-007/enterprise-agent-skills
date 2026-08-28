@@ -660,3 +660,7 @@ No estimate/monitoring/recovery strategy for a large production migration.
 - [ ] lock impact reviewed
 - [ ] destructive step gated by evidence
 - [ ] post-migration invariants verified
+
+## Cross-Skill Routing
+- For `postgresql` concerns, coordinate with the specialized skill rather than duplicating its implementation guidance.
+- For `deployment` concerns, coordinate with the specialized skill rather than duplicating its implementation guidance.

@@ -363,3 +363,9 @@ Load when needed:
 - [ ] retry/idempotency behavior reviewed
 - [ ] concurrency/external side effects reviewed
 - [ ] compatibility considered
+
+## Cross-Skill Routing
+- For `validation` concerns, coordinate with the specialized skill rather than duplicating its implementation guidance.
+- For `authorization` concerns, coordinate with the specialized skill rather than duplicating its implementation guidance.
+- For `service-layer` concerns, coordinate with the specialized skill rather than duplicating its implementation guidance.
+- For `error-handling` concerns, coordinate with the specialized skill rather than duplicating its implementation guidance.

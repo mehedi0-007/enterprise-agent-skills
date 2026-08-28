@@ -617,3 +617,7 @@ Executing expensive/mutating statements with ANALYZE without considering side ef
 - [ ] N+1/payload/connection issues considered
 - [ ] change re-measured
 - [ ] correctness preserved
+
+## Cross-Skill Routing
+- For `indexing` concerns, coordinate with the specialized skill rather than duplicating its implementation guidance.
+- For `performance` concerns, coordinate with the specialized skill rather than duplicating its implementation guidance.

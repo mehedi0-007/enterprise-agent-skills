@@ -1,14 +1,11 @@
-# V2 Production Consistency Patch
+# V2 Final Audit Fix
 
-Adds:
-- canonical production skill ownership
-- production cross-skill conflict rules
-- production routing checker
-- idempotent routing patcher
+The previous final auditor flagged the phrase `OWASP compliant` even when the skill was explicitly rejecting that claim.
 
-Run:
+This replacement makes the heuristic context-aware for negative guidance and anti-pattern examples.
+
+Install the script and rerun:
 
 ```bash
-python3 scripts/add-production-routing-v2.py
-python3 scripts/check-production-routing.py
+python3 scripts/final-audit.py
 ```

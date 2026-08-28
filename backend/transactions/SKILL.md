@@ -571,3 +571,7 @@ Introducing sagas/2PC for a workflow that a single database transaction can solv
 - `references/isolation-and-locking.md`
 - `references/retry-strategy.md`
 - `references/transactional-outbox.md`
+
+## Cross-Skill Routing
+- For `concurrency` concerns, coordinate with the specialized skill rather than duplicating its implementation guidance.
+- For `repository-pattern` concerns, coordinate with the specialized skill rather than duplicating its implementation guidance.
