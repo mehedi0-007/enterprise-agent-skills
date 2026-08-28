@@ -680,3 +680,8 @@ Credentials/PII leak through debugging.
 - `references/drafts-and-autosave.md`
 - `references/multi-step-forms.md`
 - `references/sensitive-fields.md`
+
+## Cross-Skill Routing
+For network/server lifecycle behavior, coordinate with `async-ui-states`.
+For API request/response semantics, coordinate with `api-design`.
+For labels, focus, and error accessibility, coordinate with `accessibility`.

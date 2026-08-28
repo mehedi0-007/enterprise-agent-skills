@@ -1,15 +1,5 @@
-# V2 Routing Checker Fix
+# V2 Frontend Routing Fix
 
-The previous checker was too coupled to its original matching logic.
+Adds the missing explicit `Cross-Skill Routing` sections reported by the frontend semantic checker.
 
-This replacement:
-- uses repository-relative skill paths for expected relationships
-- inspects only the `Cross-Skill Routing` section
-- accepts explicit backtick references or normal skill-name text inside that section
-- reports the exact missing handoff
-
-Run:
-
-```bash
-python3 scripts/check-semantic-routing.py
-```
+Only missing sections are added; existing skill content is preserved.

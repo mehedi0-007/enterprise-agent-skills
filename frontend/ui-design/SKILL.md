@@ -668,3 +668,8 @@ One component tries to represent unrelated interaction semantics.
 - `references/hierarchy.md`
 - `references/states.md`
 - `references/action-risk.md`
+
+## Cross-Skill Routing
+For task-flow and recovery behavior, coordinate with `ux-design`.
+For accessible semantics and interaction, coordinate with `accessibility`.
+For viewport/layout adaptation, coordinate with `responsive-design`.

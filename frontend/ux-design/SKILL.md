@@ -694,3 +694,4 @@ Users cannot understand why capability is unavailable.
 For network/server lifecycle behavior, defer to `frontend/async-ui-states`.
 For API contract semantics, coordinate with `backend/api-design`.
 For forms and tables, use the specialized frontend skills rather than duplicating their detailed interaction rules.
+For accessible interaction behavior, coordinate with `accessibility`.

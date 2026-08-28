@@ -691,3 +691,9 @@ Clients can sort by any database field without cost/security review.
 - `references/responsive-tables.md`
 - `references/accessibility.md`
 - `references/large-data.md`
+
+## Cross-Skill Routing
+For responsive table behavior, coordinate with `responsive-design`.
+For semantic/keyboard behavior, coordinate with `accessibility`.
+For access-control decisions, coordinate with `authorization`.
+For large-data/query performance, coordinate with `query-optimization`.

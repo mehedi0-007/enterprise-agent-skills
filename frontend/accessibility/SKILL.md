@@ -618,3 +618,7 @@ Semantics/focus are patched after the component is already built around incorrec
 - `references/forms-and-errors.md`
 - `references/aria-decision.md`
 - `references/verification.md`
+
+## Cross-Skill Routing
+Apply these constraints across `ui-design`, `forms`, and `navigation`.
+Coordinate responsive semantic transformations with `responsive-design`.

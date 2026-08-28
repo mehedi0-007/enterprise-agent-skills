@@ -656,3 +656,8 @@ Command menu exposes unauthorized actions.
 - `references/permissions.md`
 - `references/mobile-navigation.md`
 - `references/unsaved-changes.md`
+
+## Cross-Skill Routing
+For keyboard/focus semantics, coordinate with `accessibility`.
+For mobile layout/adaptation, coordinate with `responsive-design`.
+For actual access control, coordinate with `authorization`.

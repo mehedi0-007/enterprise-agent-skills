@@ -550,3 +550,7 @@ Controls become hidden by keyboard/safe areas.
 - `references/responsive-tables.md`
 - `references/mobile-interaction.md`
 - `references/overflow-and-content.md`
+
+## Cross-Skill Routing
+For accessible responsive behavior, coordinate with `accessibility`.
+For visual hierarchy/control placement, coordinate with `ui-design`.
