@@ -545,3 +545,10 @@ Preventing compromise but ignoring rotation/revocation/recovery.
 - [ ] evidence/tests recorded
 - [ ] residual risk documented
 - [ ] unsupported security claims avoided
+
+## Cross-Skill Routing
+Route identity/session issues to `security/authentication`.
+Route access-control issues to `security/authorization`.
+Route API attack-surface/abuse issues to `security/api-security`.
+Route credential/key lifecycle issues to `security/secrets-management`.
+This skill orchestrates review; the specialized skill owns implementation details.

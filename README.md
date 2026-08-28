@@ -1,16 +1,15 @@
-# V2 Semantic Routing
+# V2 Routing Checker Fix
 
-This patch adds the canonical ownership/routing model for cross-skill consistency.
+The previous checker was too coupled to its original matching logic.
 
-Files:
-- `docs/semantic-routing-matrix.md`
-- `docs/semantic-conflict-rules.md`
-- `scripts/check-semantic-routing.py`
+This replacement:
+- uses repository-relative skill paths for expected relationships
+- inspects only the `Cross-Skill Routing` section
+- accepts explicit backtick references or normal skill-name text inside that section
+- reports the exact missing handoff
 
 Run:
 
 ```bash
 python3 scripts/check-semantic-routing.py
 ```
-
-Unlike the earlier structural checker, this is intentionally advisory about missing routes: it identifies skills whose cross-layer handoffs deserve review rather than treating every missing mention as a hard implementation error.

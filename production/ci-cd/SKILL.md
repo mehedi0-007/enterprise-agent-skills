@@ -679,3 +679,8 @@ Persistent high-trust machine executes attacker-controlled code.
 5. Review migration/environment/deployment compatibility.
 6. Review concurrency, runner trust, and third-party action risks.
 7. Verify post-deploy validation and recovery paths.
+
+## Cross-Skill Routing
+For container build/runtime details, coordinate with `production/docker`.
+For credential lifecycle and workflow secret exposure, coordinate with `security/secrets-management`.
+For live rollout and post-deploy behavior, coordinate with `production/deployment`.

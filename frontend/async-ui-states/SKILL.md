@@ -248,3 +248,8 @@ For each async interaction ask:
 ## Activation
 
 Use when UI behavior depends on network/server work such as fetching, mutations, uploads, polling, retries, cancellation, optimistic updates, or background jobs.
+
+## Cross-Skill Routing
+For API status/error/idempotency contracts, coordinate with `backend/api-design`.
+For duplicate requests, shared-state races, and backend correctness, coordinate with `backend/concurrency`.
+For user workflow/recovery decisions, coordinate with `frontend/ux-design`.

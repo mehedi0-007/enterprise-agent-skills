@@ -627,3 +627,9 @@ Rolling deployment behaves like atomic replacement in developer's mental model.
 - `references/post-deploy.md`
 - `references/feature-flags.md`
 - `references/database-compatibility.md`
+
+## Cross-Skill Routing
+For schema/data rollout compatibility, coordinate with `database/migrations`.
+For rollout health signals and post-deploy diagnosis, coordinate with `production/observability`.
+For build, artifact, and promotion mechanics, coordinate with `production/ci-cd`.
+For container image/runtime concerns, coordinate with `production/docker`.

@@ -5,43 +5,76 @@ import sys
 
 ROOT = Path(sys.argv[1] if len(sys.argv) > 1 else ".").resolve()
 skills = sorted(ROOT.rglob("SKILL.md"))
-names = {p.parent.name for p in skills}
+
+if not skills:
+    print("No SKILL.md files found.")
+    raise SystemExit(1)
 
 EXPECTED = {
-    "indexing": ["query-optimization"],
-    "postgresql": ["query-optimization", "indexing", "migrations"],
-    "ux-design": ["api-design", "concurrency", "transactions", "async-ui-states"],
-    "async-ui-states": ["api-design", "concurrency"],
-    "deployment": ["migrations", "observability", "ci-cd", "docker"],
-    "ci-cd": ["docker", "secrets-management"],
-    "api-security": ["authentication", "authorization", "owasp"],
-    "owasp": ["authentication", "authorization", "api-security", "secrets-management"],
+    "frontend/ux-design": ["frontend/async-ui-states"],
+    "frontend/async-ui-states": ["backend/api-design", "backend/concurrency"],
+    "production/deployment": [
+        "database/migrations",
+        "production/observability",
+        "production/ci-cd",
+        "production/docker",
+    ],
+    "production/ci-cd": [
+        "production/docker",
+        "security/secrets-management",
+    ],
+    "security/api-security": [
+        "security/authentication",
+        "security/authorization",
+        "security/owasp",
+    ],
+    "security/owasp": [
+        "security/authentication",
+        "security/authorization",
+        "security/api-security",
+        "security/secrets-management",
+    ],
 }
 
-print(f"Checking semantic routing under {ROOT}")
-problems = []
+path_by_dir = {
+    p.parent.relative_to(ROOT).as_posix(): p
+    for p in skills
+}
 
-for skill_name, expected in EXPECTED.items():
-    path = next((p for p in skills if p.parent.name == skill_name), None)
-    if not path:
+print(f"Checking explicit routing sections under {ROOT}")
+
+failures = 0
+for source_dir, targets in EXPECTED.items():
+    source = path_by_dir.get(source_dir)
+    if not source:
         continue
 
-    text = path.read_text(encoding="utf-8", errors="replace")
+    text = source.read_text(encoding="utf-8", errors="replace")
 
-    for target in expected:
-        if target not in names:
-            continue
-        # Explicit mention in backticks is preferred for unambiguous routing.
-        if not re.search(rf"`{re.escape(target)}`", text):
-            problems.append(
-                f"{path.relative_to(ROOT)} should explicitly route to `{target}` "
-                f"when that boundary is relevant."
+    # Only inspect the routing section when present. This avoids unrelated
+    # mentions elsewhere from satisfying the test.
+    match = re.search(
+        r"^##\s+(?:\d+[\.\)]\s*)?Cross-Skill Routing\s*$"
+        r"(.*?)(?=^##\s+|\Z)",
+        text,
+        re.M | re.S,
+    )
+    section = match.group(1) if match else ""
+
+    for target in targets:
+        skill_name = target.rsplit("/", 1)[-1]
+        if not section or not re.search(
+            rf"`{re.escape(skill_name)}`|\b{re.escape(skill_name)}\b",
+            section,
+        ):
+            print(
+                f"ROUTING: {source_dir}/SKILL.md is missing explicit "
+                f"routing to `{skill_name}`."
             )
+            failures += 1
 
-if problems:
-    for p in problems:
-        print("ROUTING:", p)
-    print(f"\nRouting review: {len(problems)} issue(s)")
-    sys.exit(1)
+if failures:
+    print(f"\nRouting review: FAIL ({failures} issue(s))")
+    raise SystemExit(1)
 
-print("Routing review: PASS")
+print("\nRouting review: PASS")

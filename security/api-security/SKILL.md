@@ -743,3 +743,9 @@ One authorized item makes the entire batch trusted.
 - [ ] replay/idempotency reviewed
 - [ ] third-party responses treated as untrusted
 - [ ] negative security tests exist
+
+## Cross-Skill Routing
+For identity, session, token, and recovery lifecycle, coordinate with `security/authentication`.
+For object, tenant, function, and property authorization, coordinate with `security/authorization`.
+For OWASP-oriented review orchestration, coordinate with `security/owasp`.
+For credentials/keys used by the API or integrations, coordinate with `security/secrets-management`.

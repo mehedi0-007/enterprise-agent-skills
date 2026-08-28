@@ -689,3 +689,8 @@ Users cannot understand why capability is unavailable.
 - `references/optimistic-ui.md`
 - `references/destructive-actions.md`
 - `references/long-running-work.md`
+
+## Cross-Skill Routing
+For network/server lifecycle behavior, defer to `frontend/async-ui-states`.
+For API contract semantics, coordinate with `backend/api-design`.
+For forms and tables, use the specialized frontend skills rather than duplicating their detailed interaction rules.
